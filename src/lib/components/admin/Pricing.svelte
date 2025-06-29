@@ -7,8 +7,7 @@
 	import { getModelPricing, updateModelPricing, type ModelPricing, type ModelPricingForm } from '$lib/apis/admin';
 	import { getModels } from '$lib/apis';
 
-	import PricingList from './Pricing/PricingList.svelte';
-	import PricingForm from './Pricing/PricingForm.svelte';
+	import PricingTable from './Pricing/PricingTable.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -93,9 +92,9 @@
 
 	<div class="flex-1 mt-1 lg:mt-0 overflow-y-scroll">
 		{#if selectedTab === 'overview'}
-			<PricingList />
+			<PricingTable />
 		{:else if selectedTab === 'manage'}
-			<PricingForm />
+			<PricingTable />
 		{/if}
 	</div>
 </div> 
