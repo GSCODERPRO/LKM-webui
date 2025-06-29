@@ -73,6 +73,20 @@
 						>
 
 						<a
+							class="min-w-fit rounded-full p-1.5 {$page.url.pathname.includes('/admin/pricing')
+								? ''
+								: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition"
+							href="/admin/pricing">{$i18n.t('Pricing')}</a
+						>
+
+						<a
+							class="min-w-fit rounded-full p-1.5 {$page.url.pathname.includes('/admin/reports')
+								? ''
+								: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition"
+							href="/admin/reports">{$i18n.t('Reports')}</a
+						>
+
+						<a
 							class="min-w-fit rounded-full p-1.5 {$page.url.pathname.includes('/admin/settings')
 								? ''
 								: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition"

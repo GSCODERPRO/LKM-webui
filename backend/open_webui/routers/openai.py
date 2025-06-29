@@ -43,6 +43,7 @@ from open_webui.utils.misc import (
 
 from open_webui.utils.auth import get_admin_user, get_verified_user
 from open_webui.utils.access_control import has_access
+from open_webui.utils.usage_logger import usage_logger
 
 
 log = logging.getLogger(__name__)
@@ -865,6 +866,26 @@ async def generate_chat_completion(
                 response = await r.text()
 
             r.raise_for_status()
+            
+            # Log usage if response contains token information
+            if isinstance(response, dict) and "usage" in response:
+                usage = response["usage"]
+                input_tokens = usage.get("prompt_tokens", 0)
+                output_tokens = usage.get("completion_tokens", 0)
+                
+                # Extract conversation_id from metadata if available
+                conversation_id = None
+                if metadata and isinstance(metadata, dict):
+                    conversation_id = metadata.get("conversation_id")
+                
+                usage_logger.log_usage(
+                    user_id=user.id,
+                    model=model_id,
+                    input_tokens=input_tokens,
+                    output_tokens=output_tokens,
+                    conversation_id=conversation_id
+                )
+            
             return response
     except Exception as e:
         log.exception(e)
