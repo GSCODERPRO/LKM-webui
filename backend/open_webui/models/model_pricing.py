@@ -27,6 +27,10 @@ class ModelPricingTable:
         with get_db() as db:
             result = db.query(ModelPricing).filter_by(model_id=model_id).first()
             return ModelPricingModel.model_validate(result) if result else None
+    def get_all(self) -> list[ModelPricingModel]:
+        with get_db() as db:
+            results = db.query(ModelPricing).all()
+            return [ModelPricingModel.model_validate(r) for r in results]
     def upsert(self, model_id: str, auto_pricing: Optional[float], manual_price: Optional[float], source: Optional[str]) -> ModelPricingModel:
         with get_db() as db:
             now = int(time.time())

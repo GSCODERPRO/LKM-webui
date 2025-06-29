@@ -31,9 +31,8 @@ class UsageReportResponse(BaseModel):
 async def get_model_pricing(user: UserModel = Depends(get_admin_user)):
     """Get all model pricing information"""
     try:
-        # This would need to be implemented to get all pricing records
-        # For now, return empty list
-        return {"pricing": []}
+        pricing_records = ModelPricings.get_all()
+        return {"pricing": [r.model_dump() for r in pricing_records]}
     except Exception as e:
         log.error(f"Failed to get model pricing: {e}")
         raise HTTPException(status_code=500, detail="Failed to get model pricing")
