@@ -9,6 +9,7 @@ from open_webui.models.usage_log import UsageLogs, UsageLogModel
 from open_webui.utils.pricing import pricing_service
 from open_webui.utils.usage_logger import usage_logger
 from open_webui.env import SRC_LOG_LEVELS
+import traceback
 
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS.get("ADMIN", "INFO"))
@@ -53,7 +54,8 @@ async def update_model_pricing(
         return {"success": True, "pricing": pricing_record}
     except Exception as e:
         log.error(f"Failed to update model pricing: {e}")
-        raise HTTPException(status_code=500, detail="Failed to update model pricing")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to update model pricing: {e}")
 
 @router.get("/reports/usage")
 async def get_usage_report(
