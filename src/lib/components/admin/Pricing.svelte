@@ -62,7 +62,7 @@
 				? ''
 				: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
 			on:click={() => {
-				goto('/admin/pricing/overview');
+				goto('/admin/settings/pricing');
 			}}
 		>
 			<div class="self-center mr-2">
@@ -79,7 +79,7 @@
 				? ''
 				: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
 			on:click={() => {
-				goto('/admin/pricing/manage');
+				goto('/admin/settings/pricing/manage');
 			}}
 		>
 			<div class="self-center mr-2">

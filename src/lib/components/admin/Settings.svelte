@@ -24,6 +24,12 @@
 	import CodeExecution from './Settings/CodeExecution.svelte';
 	import Tools from './Settings/Tools.svelte';
 
+	// AI Pro components
+	import Pricing from './Pricing.svelte';
+	import Reports from './Reports.svelte';
+	import PricingForm from './Pricing/PricingForm.svelte';
+	import ReportsDetail from './Reports/ReportsDetail.svelte';
+
 	const i18n = getContext('i18n');
 
 	let selectedTab = 'general';
@@ -32,23 +38,34 @@
 	$: {
 		const pathParts = $page.url.pathname.split('/');
 		const tabFromPath = pathParts[pathParts.length - 1];
-		selectedTab = [
-			'general',
-			'connections',
-			'models',
-			'evaluations',
-			'tools',
-			'documents',
-			'web',
-			'code-execution',
-			'interface',
-			'audio',
-			'images',
-			'pipelines',
-			'db'
-		].includes(tabFromPath)
-			? tabFromPath
-			: 'general';
+		const subTabFromPath = pathParts[pathParts.length - 2];
+		
+		// Handle sub-tabs for pricing and reports
+		if (pathParts.includes('pricing') && pathParts.includes('manage')) {
+			selectedTab = 'pricing-manage';
+		} else if (pathParts.includes('reports') && pathParts.includes('detail')) {
+			selectedTab = 'reports-detail';
+		} else {
+			selectedTab = [
+				'general',
+				'connections',
+				'models',
+				'evaluations',
+				'tools',
+				'documents',
+				'web',
+				'code-execution',
+				'interface',
+				'audio',
+				'images',
+				'pipelines',
+				'db',
+				'pricing',
+				'reports'
+			].includes(tabFromPath)
+				? tabFromPath
+				: 'general';
+		}
 	}
 
 	$: if (selectedTab) {
@@ -431,6 +448,47 @@
 			</div>
 			<div class=" self-center">{$i18n.t('Database')}</div>
 		</button>
+
+		<button
+			id="pricing"
+			class="px-0.5 py-1 min-w-fit rounded-lg flex-1 md:flex-none flex text-left transition {selectedTab ===
+			'pricing'
+				? ''
+				: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+			on:click={() => {
+				goto('/admin/settings/pricing');
+			}}
+		>
+			<div class=" self-center mr-2">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					class="size-4"
+				>
+					<path
+						d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"
+					/>
+				</svg>
+			</div>
+			<div class=" self-center">{$i18n.t('Pricing')}</div>
+		</button>
+
+		<button
+			id="reports"
+			class="px-0.5 py-1 min-w-fit rounded-lg flex-1 md:flex-none flex text-left transition {selectedTab ===
+			'reports'
+				? ''
+				: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+			on:click={() => {
+				goto('/admin/settings/reports');
+			}}
+		>
+			<div class=" self-center mr-2">
+				<ChartBar />
+			</div>
+			<div class=" self-center">{$i18n.t('Reports')}</div>
+		</button>
 	</div>
 
 	<div class="flex-1 mt-3 lg:mt-0 overflow-y-scroll pr-1 scrollbar-hidden">
@@ -512,6 +570,14 @@
 					toast.success($i18n.t('Settings saved successfully!'));
 				}}
 			/>
+		{:else if selectedTab === 'pricing'}
+			<Pricing />
+		{:else if selectedTab === 'reports'}
+			<Reports />
+		{:else if selectedTab === 'pricing-manage'}
+			<PricingForm />
+		{:else if selectedTab === 'reports-detail'}
+			<ReportsDetail />
 		{/if}
 	</div>
 </div>
